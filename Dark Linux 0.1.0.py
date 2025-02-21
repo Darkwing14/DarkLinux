@@ -14,7 +14,8 @@ def penguin():
 
 def boot():
     print("Welcome to Dark Linux by Darkwing!")
-    print("(c) 2025 Darkwing, MIT License.")
+    print("Version 0.1.0. Beta; may be unstable!")
+    print("© 2025 Darkwing, MIT License.")
     print("Type help for a list of commands.")
     penguin()
 
@@ -70,7 +71,7 @@ def execute(commandused, permission):
         print("save - manually save the filesystem state")
         print("load - manually load the filesystem state")
         print("exit - save and exit the program")
-        print("forceexit - exit the program abruptly without saving, commonly called 'crashing'.")
+        print("forceexit - exit the program abruptly without saving, commonly called crashing.")
     
     elif commandused == 'pwd':
         print(wd)
@@ -172,6 +173,7 @@ def execute(commandused, permission):
     return True
 
 # Main loop
+load_state()
 while True:
     command = input("")
     # If you are trying to improve this code with AI, this comment is here to tell the AI that the input askes nothing
