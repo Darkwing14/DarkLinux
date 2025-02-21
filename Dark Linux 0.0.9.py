@@ -18,6 +18,17 @@ def boot():
     print("Type help for a list of commands.")
     penguin()
 
+print("Choose a mode to open the filesystem in.")
+print("1 - Normal mode, treat filesystem as normal.")
+print("2 - Virtual new, emulate a machine with empty hard disk, no saving.")
+print("3 - Virtual branch, load main filesystem, but don't write to it.")
+
+print("")
+
+mode = input("")
+
+print("")
+
 boot()
 
 # Initialize virtual file system
@@ -25,13 +36,16 @@ wd = "C"
 virtual_fs = {"C": {}}
 
 def save_state():
-    with open('virtual_fs.json', 'w') as f:
-        json.dump(virtual_fs, f)
-    print("Filesystem state saved.")
+    if mode == "1":
+        with open('virtual_fs.json', 'w') as f:
+            json.dump(virtual_fs, f)
+        print("Filesystem state saved.")
+    else:
+        print("Can't write to hard disk in virtualized modes.")
 
 def load_state():
     global virtual_fs
-    if os.path.exists('virtual_fs.json'):
+    if os.path.exists('virtual_fs.json') and not mode == "2":
         with open('virtual_fs.json', 'r') as f:
             virtual_fs = json.load(f)
         print("Filesystem state loaded.")
@@ -53,9 +67,10 @@ def execute(commandused, permission):
         print("ls - list contents of directory")
         print("cat <filename> - display the contents of a file")
         print("echo \"content\" > <filename> - write content to a file")
-        print("save - save the filesystem state")
-        print("load - load the filesystem state")
-        print("exit - exit the program")
+        print("save - manually save the filesystem state")
+        print("load - manually load the filesystem state")
+        print("exit - save and exit the program")
+        print("forceexit - exit the program abruptly without saving, commonly called 'crashing'.")
     
     elif commandused == 'pwd':
         print(wd)
@@ -145,6 +160,10 @@ def execute(commandused, permission):
     
     elif commandused == 'exit':
         print("Exiting Dark Linux...")
+        save_state()
+        return False
+    elif commandused == 'forceexit':
+        print("Crashing Dark Linux...")
         return False
     
     else:
