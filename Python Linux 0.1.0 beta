@@ -13,7 +13,7 @@ def penguin():
     print(r"\___)=(___/")
 
 def boot():
-    print("Welcome to Pynux by Darkwing!")
+    print("Welcome to Python Linux by Darkwing!")
     print("Version 0.1.0. Beta; may be unstable!")
     print("© 2025 Darkwing, MIT License.")
     print("Type help for a list of commands.")
