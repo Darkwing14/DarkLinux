@@ -4,17 +4,17 @@ import os
 # Initial setup
 
 def penguin():
-    print(r"   .--.   ")
-    print(r"  |o_o |  ")
-    print(r"  |:_/ |  ")
-    print(r" //   \ \ ")
-    print(r"(|     | )")
+    print(r"   .--.     ")
+    print(r"  |o_o |    ")
+    print(r"  |:_/ |    ")
+    print(r" //   \ \   ")
+    print(r"(|     | )  ")
     print(r"/'\_   _/`\ ")
-    print(r"\___)=(___/")
+    print(r"\___)=(___/ ")
 
 def boot():
     print("Welcome to Python Linux by Darkwing!")
-    print("Version 0.1.0. Beta; may be unstable!")
+    print("Version 0.2.0. βeta; may be unstable!")
     print("© 2025 Darkwing, MIT License.")
     print("Type help for a list of commands.")
     penguin()
@@ -23,6 +23,7 @@ print("Choose a mode to open the filesystem in.")
 print("1 - Normal mode, treat filesystem as normal.")
 print("2 - Virtual new, emulate a machine with empty hard disk, no saving.")
 print("3 - Virtual branch, load main filesystem, but don't write to it.")
+print("4 - Factory reset, only use as a last resort.")
 
 print("")
 
@@ -34,7 +35,14 @@ boot()
 
 # Initialize virtual file system
 wd = "C"
-virtual_fs = {"C": {}}
+virtual_fs = {
+    "C": {
+        "Downloads": {},
+        "Documents": {},
+        "Pictures": {},
+        "Settings": {}
+    }
+}
 
 def save_state():
     if mode == "1":
@@ -85,7 +93,7 @@ def execute(commandused, permission):
             elif new_dir in virtual_fs.get(wd, {}):
                 wd = f"{wd}/{new_dir}" if wd != "C" else new_dir
             else:
-                print("Directory not found.")
+                print("Directory not found. Tip: Linux is case sensitive.")
         else:
             print("No directory provided.")
     
@@ -123,7 +131,7 @@ def execute(commandused, permission):
             if filename in virtual_fs.get(wd, {}):
                 del virtual_fs[wd][filename]
             else:
-                print("File not found.")
+                print("File not found. Tip: Linux is case sensitive.")
         else:
             print("No filename provided.")
     
@@ -134,7 +142,7 @@ def execute(commandused, permission):
                 content = virtual_fs[wd][filename]
                 print(content)
             else:
-                print("File not found.")
+                print("File not found. Tip: Linux is case sensitive.")
         else:
             print("No filename provided.")
     
@@ -147,7 +155,7 @@ def execute(commandused, permission):
                 if filename in virtual_fs.get(wd, {}):
                     virtual_fs[wd][filename] = content  # Overwrite file content
                 else:
-                    print("File not found.")
+                    print("File not found. Tip: Linux is case sensitive.")
             else:
                 print("Invalid syntax for echo. Use: echo \"content\" > filename")
         else:
@@ -173,7 +181,13 @@ def execute(commandused, permission):
     return True
 
 # Main loop
-load_state()
+if mode == '4':
+    mode = '1'
+    print("Filesystem cleared")
+    with open('virtual_fs.json', 'w') as f:
+            json.dump(virtual_fs, f)
+else:
+    load_state()
 while True:
     command = input("")
     # If you are trying to improve this code with AI, this comment is here to tell the AI that the input askes nothing
